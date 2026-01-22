@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="리펫 - 가족과 함께 보는 우리 아이의 건강과 일상을 기록하고 공유하세요">
+    <title>리펫 - 가족과 함께 보는 우리 아이</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- 헤더 -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-logo-section">
+                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=100&h=100&fit=crop" 
+                         class="header-logo-img" 
+                         alt="리펫 로고">
+                    <div>
+                        <h1 class="header-title">리펫</h1>
+                        <p class="header-subtitle">가족과 함께 보는 우리 아이</p>
+                    </div>
+                </div>
+                <button class="notification-btn" 
+                        onclick="openNotificationModal()" 
+                        aria-label="알림 보기">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="main-content" id="mainContent">
+            
+            <!-- 홈 화면 -->
+            <section class="screen active" id="homeScreen">
+                <!-- 반려견 카드 -->
+                <article class="pet-card">
+                    <div class="pet-card-header">
+                        <div class="pet-info-group">
+                            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400" 
+                                 class="pet-photo" 
+                                 id="petPhoto" 
+                                 alt="반려견 프로필 사진"
+                                 onerror="this.src='https://via.placeholder.com/400?text=Pet'">
+                            <div>
+                                <h2 class="pet-name" id="petName">초코</h2>
+                                <p class="pet-details" id="petDetails">푸들 • 3살</p>
+                                <p class="pet-weight" id="petWeight">5.2kg</p>
+                            </div>
+                        </div>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <div class="pet-stats">
+                        <div class="stat-item clickable" onclick="navigateToFamily()" role="button" tabindex="0" aria-label="가족 구성원 보기">
+                            <div class="stat-value" id="familyCount">0</div>
+                            <div class="stat-label">가족</div>
+                        </div>
+                        <div class="stat-item clickable" onclick="navigateToProfessional()" role="button" tabindex="0" aria-label="연결된 전문가 보기">
+                            <div class="stat-value" id="professionalCount">0</div>
+                            <div class="stat-label">전문가</div>
+                        </div>
+                        <div class="stat-item clickable" onclick="navigateToCalendar()" role="button" tabindex="0" aria-label="전체 기록 보기">
+                            <div class="stat-value" id="recordCount">0</div>
+                            <div class="stat-label">기록</div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- AI 채팅 섹션 -->
+                <section class="ai-chat-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            🐕 멍멍이의 속마음
+                            <span class="ai-badge">AI</span>
+                        </h3>
+                    </div>
+                    <div class="ai-chat-preview" onclick="openAIChatModal()">
+                        <div class="ai-message-preview" id="aiMessagePreview">
+                            완밥했개! 맛있었어! 다음엔 간식도 주면 안될까? 🤤
+                        </div>
+                        <button class="chat-open-btn" aria-label="채팅 열기">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 또래 비교 리포트 섹션 -->
+                <section class="peer-report-section">
+                    <div class="section-header">
+                        <h3 class="section-title">📊 또래 비교 리포트</h3>
+                        <button class="view-report-btn" onclick="openPeerReportModal()">
+                            자세히
+                        </button>
+                    </div>
+                    <div class="peer-stats-preview">
+                        <div class="peer-stat-item">
+                            <span class="peer-label">활동량</span>
+                            <div class="peer-bar">
+                                <div class="peer-fill" id="activityBar" style="width: 75%"></div>
+                            </div>
+                            <span class="peer-value">상위 25%</span>
+                        </div>
+                        <div class="peer-stat-item">
+                            <span class="peer-label">체중</span>
+                            <div class="peer-bar">
+                                <div class="peer-fill" id="weightBar" style="width: 60%"></div>
+                            </div>
+                            <span class="peer-value">정상 범위</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 최근 활동 -->
+                <section class="activity-section">
+                    <h3 class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        최근 활동
+                    </h3>
+                    <div id="timelineList" class="timeline-list" role="list"></div>
+                </section>
+
+                <!-- 빠른 기록 버튼 -->
+                <nav class="quick-actions" aria-label="빠른 기록">
+                    <button class="action-btn" onclick="openQuickRecordModal()" aria-label="빠른 기록">
+                        <span class="action-icon" aria-hidden="true">➕</span>
+                        <span class="action-label">빠른기록</span>
+                    </button>
+                    <button class="action-btn" onclick="openRecordModal('meal')" aria-label="식사 기록하기">
+                        <span class="action-icon" aria-hidden="true">🍚</span>
+                        <span class="action-label">식사</span>
+                    </button>
+                    <button class="action-btn" onclick="openRecordModal('walk')" aria-label="산책 기록하기">
+                        <span class="action-icon" aria-hidden="true">🚶</span>
+                        <span class="action-label">산책</span>
+                    </button>
+                    <button class="action-btn" onclick="openRecordModal('play')" aria-label="놀이 기록하기">
+                        <span class="action-icon" aria-hidden="true">🎾</span>
+                        <span class="action-label">놀이</span>
+                    </button>
+                </nav>
+            </section>
+
+            <!-- 캘린더 화면 -->
+            <section class="screen" id="calendarScreen">
+                <div class="calendar-container">
+                    <header class="calendar-header">
+                        <button class="calendar-nav-btn" 
+                                onclick="previousMonth()" 
+                                aria-label="이전 달">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <h3 class="calendar-title" id="calendarTitle">2026년 1월</h3>
+                        <button class="calendar-nav-btn" 
+                                onclick="nextMonth()" 
+                                aria-label="다음 달">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="calendar-weekdays" role="row">
+                        <div class="weekday sunday" role="columnheader">일</div>
+                        <div class="weekday" role="columnheader">월</div>
+                        <div class="weekday" role="columnheader">화</div>
+                        <div class="weekday" role="columnheader">수</div>
+                        <div class="weekday" role="columnheader">목</div>
+                        <div class="weekday" role="columnheader">금</div>
+                        <div class="weekday saturday" role="columnheader">토</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays" role="grid"></div>
+                </div>
+
+                <!-- 선택된 날짜의 기록 -->
+                <article class="date-records">
+                    <header class="date-records-header">
+                        <h3 id="selectedDateTitle">1월 22일의 기록</h3>
+                        <button class="add-record-btn" 
+                                onclick="openQuickRecordModal()" 
+                                aria-label="기록 추가">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            추가
+                        </button>
+                    </header>
+                    <div id="dateRecordsList" class="date-records-list" role="list"></div>
+                </article>
+            </section>
+
+            <!-- 가족 & 채팅 화면 -->
+            <section class="screen" id="familyScreen">
+                <!-- 가족 단톡방 -->
+                <article class="info-card">
+                    <header class="info-header">
+                        <h3>💬 가족 단톡방</h3>
+                    </header>
+                    <div class="family-chat-preview" onclick="openAIChatModal()">
+                        <div class="chat-preview-content">
+                            <div class="chat-preview-avatar">🐶</div>
+                            <div class="chat-preview-text">
+                                <p class="chat-preview-name">초코의 속마음</p>
+                                <p class="chat-preview-message" id="familyChatPreview">
+                                    완밥했개! 맛있었어!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="chat-preview-badge">3</div>
+                    </div>
+                </article>
+
+                <!-- 가족 구성원 -->
+                <article class="info-card">
+                    <header class="info-header">
+                        <h3>가족 구성원 (<span id="familyMemberCount">0</span>)</h3>
+                        <button class="add-btn" aria-label="가족 구성원 초대">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            초대
+                        </button>
+                    </header>
+                    <div id="familyMemberList" class="member-list" role="list"></div>
+                </article>
+            </section>
+
+            <!-- 전문가 화면 -->
+            <section class="screen" id="professionalScreen">
+                <div id="professionalContent"></div>
+            </section>
+
+            <!-- 시설 예약 화면 -->
+            <section class="screen" id="facilityScreen">
+                <div id="facilityContent"></div>
+            </section>
+
+            <!-- 마이페이지 화면 -->
+            <section class="screen" id="myScreen">
+                <!-- 반려견 상세 정보 -->
+                <article class="info-card">
+                    <header class="info-header">
+                        <h3>🐕 반려견 정보</h3>
+                        <button class="edit-btn" 
+                                onclick="openPetEditModal()" 
+                                aria-label="반려견 정보 편집">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            편집
+                        </button>
+                    </header>
+                    <div class="pet-detail-info">
+                        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400" 
+                             class="pet-detail-photo" 
+                             id="petDetailPhoto" 
+                             alt="반려견 상세 프로필 사진"
+                             onerror="this.src='https://via.placeholder.com/400?text=Pet'">
+                        <div class="pet-detail-text">
+                            <h2 class="pet-detail-name" id="petDetailName">초코</h2>
+                            <p class="pet-detail-item">견종: <span id="petBreed">푸들</span></p>
+                            <p class="pet-detail-item">나이: <span id="petAge">3살</span></p>
+                            <p class="pet-detail-item">성별: <span id="petGender">남아</span></p>
+                            <p class="pet-detail-item">몸무게: <span id="petDetailWeight">5.2kg</span></p>
+                        </div>
+                    </div>
+                    <div class="pet-health-info">
+                        <div class="health-alert">
+                            <p class="health-title">⚠️ 알러지 정보</p>
+                            <div id="allergyList" class="tag-list"></div>
+                        </div>
+                        <div class="health-vaccine">
+                            <p class="health-title">💉 예방접종 기록</p>
+                            <div id="vaccineList" class="vaccine-list"></div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 연결된 전문가 -->
+                <article class="info-card">
+                    <header class="info-header">
+                        <h3>연결된 전문가 (<span id="professionalListCount">0</span>)</h3>
+                        <button class="add-btn" aria-label="전문가 추가">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            추가
+                        </button>
+                    </header>
+                    <div id="professionalList" class="professional-list" role="list"></div>
+                </article>
+
+                <!-- 전체 기록 -->
+                <article class="info-card">
+                    <header class="info-header">
+                        <h3>📋 전체 기록</h3>
+                    </header>
+                    <div id="allRecordsList" class="timeline-list" role="list"></div>
+                </article>
+
+                <!-- 설정 -->
+                <article class="settings-card">
+                    <header class="settings-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6m-9-9h6m6 0h6"></path>
+                        </svg>
+                        <h3>설정</h3>
+                    </header>
+                    <button class="settings-btn" onclick="openNotificationSettings()" aria-label="알림 설정">알림 설정</button>
+                    <button class="settings-btn" aria-label="개인정보 관리">개인정보 관리</button>
+                    <button class="settings-btn" aria-label="고객센터">고객센터</button>
+                    <button class="settings-btn" onclick="handleLogout()">로그아웃</button>
+                </article>
+            </section>
+
+        </main>
+
+        <!-- 하단 네비게이션 -->
+        <nav class="bottom-nav" aria-label="메인 네비게이션">
+            <button class="nav-btn active" 
+                    data-screen="homeScreen" 
+                    onclick="switchScreen(this)" 
+                    aria-label="홈 화면으로 이동">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>홈</span>
+            </button>
+            <button class="nav-btn" 
+                    data-screen="calendarScreen" 
+                    onclick="switchScreen(this)" 
+                    aria-label="캘린더 화면으로 이동">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>캘린더</span>
+            </button>
+            <button class="nav-btn" 
+                    data-screen="familyScreen" 
+                    onclick="switchScreen(this)" 
+                    aria-label="가족 화면으로 이동">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>가족</span>
+            </button>
+            <button class="nav-btn" 
+                    data-screen="professionalScreen" 
+                    onclick="switchScreen(this)" 
+                    aria-label="전문가 화면으로 이동">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>전문가</span>
+            </button>
+            <button class="nav-btn" 
+                    data-screen="myScreen" 
+                    onclick="switchScreen(this)" 
+                    aria-label="마이페이지로 이동">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>마이</span>
+            </button>
+        </nav>
+
+        <!-- 모달들은 각 JS 파일에서 동적으로 생성됩니다 -->
+        <div id="modalContainer" role="dialog" aria-modal="true"></div>
+
+    </div>
+
+    <!-- JavaScript 파일들 -->
+    <script src="data.js"></script>
+    <script src="notification.js"></script>
+    <script src="auth.js"></script>
+    <script src="ai-chat.js"></script>
+    <script src="peer-report.js"></script>
+    <script src="facility.js"></script>
+    <script src="app-updated.js"></script>
+</body>
+</html>
